@@ -6,9 +6,22 @@ void Scene::AddToScene(Layers layer, IDrawable* viewComponent)
     renderMap[layer].push_back(viewComponent);
 }
 
+void Scene::AddToCamera(IWatchable* watchable)
+{
+    watchables.push_back(watchable);
+}
+
 void Scene::RemoveFromScene(Layers layer, int index)
 {
     renderMap[layer].erase(renderMap[layer].begin() + index);
+}
+
+void Scene::CameraFollow(sf::RenderWindow& window)
+{
+    for(IWatchable* w : watchables)
+    {
+        w->SetCamera(window);
+    }
 }
 
 void Scene::RenderAll(sf::RenderTarget& target)

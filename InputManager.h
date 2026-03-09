@@ -9,7 +9,7 @@ class InputManager
 {
 public:
 
-    void AddToListeners(CController* ctrlComponent);
+    void AddToListeners(IListen* ctrlComponent);
 
     void MouseDown(sf::Mouse::Button button);
 
@@ -25,7 +25,7 @@ public:
 
     void NotifyEvent();
 
-    std::vector<CController*> listeners;
+    std::vector<IListen*> listeners;
     std::unordered_set<sf::Keyboard::Key> keys;
     std::unordered_set<sf::Mouse::Button> buttons;
 

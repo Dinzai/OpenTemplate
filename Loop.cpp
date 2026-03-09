@@ -1,14 +1,7 @@
 #include "Loop.h"
 #include <iostream>
 
-
-//inheriting from Base class with a custom entity will give it the things
-//it needs to be drawable, i suggets making the player ineheirt both Base, and CController
-//Found in Basic.h/Basic.cpp
-
-//i intentionally removed my player class from this
-
-Loop::Loop() : window(sf::VideoMode(1200, 800), "True Rouge")
+Loop::Loop() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Souls_Like")
 {
     asset = new Assets();
     
@@ -29,12 +22,21 @@ void Loop::Init()
 {
     scene = Scene();
     manager = InputManager();
-    
-//this is where you add what is event driven
-    //manager.AddToListeners();
+    collisionManager = CollisionManager();
 
-//this is where you add what is drawn 
-    //scene.AddToScene();
+    player = new Player(*asset);
+    player->SetPosition(200, 200);
+
+    otherTest = new Player(*asset);
+    otherTest->SetPosition(500, 500);
+
+    manager.AddToListeners(player);
+    collisionManager.AddToCollisionManager(player->collision);
+    scene.AddToScene(Layers::ENTITY, player->currentView);    
+    scene.AddToCamera(player);
+
+    collisionManager.AddToCollisionManager(otherTest->collision);
+    scene.AddToScene(Layers::UI, otherTest->currentView); 
 
 }
 
@@ -75,20 +77,21 @@ void Loop::FixedUpdate()
         }
     }
 }
-//only the manager should update and handle events, no other entitys 
-//should handle that individually, add them to the listeners
+
 void Loop::Update()
 {
     deltaTime = mainClock.getElapsedTime();
-    manager.NotifyScene(scene.renderMap);
     manager.GetDeltaTime(deltaTime);
+    manager.NotifyScene(scene.renderMap);
+    collisionManager.UpdateNormals();
+    collisionManager.CheckCollisions();
     mainClock.restart();
 }
-//only the scene should render, not individual entitys,
-//leave it to the scene to add them to the renderMap
+
 void Loop::Render()
 {
     window.clear();
+    scene.CameraFollow(window);
     scene.RenderAll(window);
     window.display();
 }

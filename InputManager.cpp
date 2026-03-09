@@ -1,6 +1,6 @@
 #include "InputManager.h"
 
-void InputManager::AddToListeners(CController *ctrlComponent)
+void InputManager::AddToListeners(IListen *ctrlComponent)
 {
     listeners.push_back(ctrlComponent);
 }
@@ -17,6 +17,7 @@ void InputManager::MouseUp(sf::Mouse::Button button)
 
 void InputManager::KeyDown(sf::Keyboard::Key key)
 {
+
     keys.insert(key);
 }
 

@@ -1,9 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
-//custom sprite sheet animation
-//this is used as the texture, and is inside the 
-//CView
+
 namespace DINZAI
 {
     class SpriteSheet
@@ -12,12 +10,12 @@ namespace DINZAI
         // Make the sprite
         SpriteSheet(std::string fileLocation, int numXFrames, int numYFrames, float animationTime)
         {
-            spriteSheetTexture.loadFromFile(fileLocation);
+            spriteSheetTexture->loadFromFile(fileLocation);
 
-            spriteSheetSize.width = spriteSheetTexture.getSize().x;
-            spriteSheetSize.height = spriteSheetTexture.getSize().y;
+            spriteSheetSize.width = spriteSheetTexture->getSize().x;
+            spriteSheetSize.height = spriteSheetTexture->getSize().y;
 
-            theSprite.setTexture(spriteSheetTexture);
+            theSprite.setTexture(*spriteSheetTexture);
             theSprite.setTextureRect(spriteSheetSize);
             SetFrameCount(numXFrames, numYFrames);
             SetAnimTime(animationTime);
@@ -28,13 +26,13 @@ namespace DINZAI
             startFrame = beginFrame;
             limitFrame = endFrame;
 
-            spriteSheetTexture = *temp;
-            spriteSheetTexture.setSmooth(false);
+            spriteSheetTexture = temp;
+            spriteSheetTexture->setSmooth(false);
 
-            spriteSheetSize.width = spriteSheetTexture.getSize().x;
-            spriteSheetSize.height = spriteSheetTexture.getSize().y;
+            spriteSheetSize.width = spriteSheetTexture->getSize().x;
+            spriteSheetSize.height = spriteSheetTexture->getSize().y;
 
-            theSprite.setTexture(spriteSheetTexture);
+            theSprite.setTexture(*spriteSheetTexture);
             theSprite.setTextureRect(spriteSheetSize);
             SetFrameCount(numXFrames, numYFrames);
             SetAnimTime(animationTime);
@@ -125,7 +123,7 @@ namespace DINZAI
             animTime = amount;
         }
 
-        sf::Texture spriteSheetTexture;
+        sf::Texture* spriteSheetTexture;
         sf::IntRect spriteSheetSize;
         sf::Sprite theSprite;
         sf::Clock animClock;

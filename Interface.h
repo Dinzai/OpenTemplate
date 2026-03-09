@@ -5,15 +5,19 @@
 #include <unordered_set>
 #include <iostream>
 
-//Fill in your asset types here
+#define WINDOW_WIDTH 1200
+#define WINDOW_HEIGHT 800
+
 enum Asset
 {
-    PLAYER,
-    UI,
-    WHATEVER,
-    
+    PLAYERF,
+    PLAYERB,
+    PLAYERL,
+    PLAYERR,
+    PLAYERROLLFB,
+    PLAYERROLLLR,
 };
-//this is for the Scene, drawable system
+
 enum Layers
 {
     BACKGROUND,
@@ -33,6 +37,19 @@ public:
     virtual void Render(sf::RenderTarget &target) = 0;
 };
 
+class IWatchable
+{
+public:
+    virtual void SetCamera(sf::RenderWindow &window) = 0;
+};
+
+class IKnock
+{
+public:
+    virtual void OnUpdateNormals() = 0;
+    virtual void OnCollision(IKnock *other) = 0;
+};
+
 class IListen
 {
 public:
@@ -40,7 +57,7 @@ public:
 
     virtual void OnClick(std::unordered_set<sf::Mouse::Button> buttons) = 0;
 
-    virtual void OnCheck(std::map<Layers, std::vector<IDrawable*>>& renderMap) = 0;
+    virtual void OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap) = 0;
 
+    virtual void Update(sf::Time deltaTime) = 0;
 };
-

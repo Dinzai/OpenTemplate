@@ -3,7 +3,8 @@
 #include "Assets.h"
 #include "Scene.h"
 #include "InputManager.h"
-#include "Anim.h"
+#include "CollisionManager.h"
+#include "Player.h"
 
 class Loop
 {
@@ -21,9 +22,14 @@ protected:
 
     void Render();
 
+    Player* player;
+    Player* otherTest;
+    
     Assets* asset;
     Scene scene;
     InputManager manager; 
+    CollisionManager collisionManager;
+
     sf::Time deltaTime;
     sf::Clock mainClock;
 

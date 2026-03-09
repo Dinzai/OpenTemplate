@@ -7,23 +7,27 @@ Assets::Assets()
 
 void Assets::Add(Asset type, std::string name)
 {
-    sf::Texture* tempPtr = new sf::Texture();
+    sf::Texture *tempPtr = new sf::Texture();
     tempPtr->loadFromFile(name);
     allTextures[type].push_back(tempPtr);
 }
 
 void Assets::Preload()
-{   
-    Add(Asset::PLAYER, "PATH To YOUR PLAYER");
+{
+    Add(Asset::PLAYERF, "Asset/playerFront.png");
+    Add(Asset::PLAYERB, "Asset/playerBack.png");
+    Add(Asset::PLAYERL, "Asset/playerLeft.png");
+    Add(Asset::PLAYERR, "Asset/playerRight.png");
 
+    Add(Asset::PLAYERROLLFB, "Asset/roll.png");
+    Add(Asset::PLAYERROLLLR, "Asset/rollOther.png");
 }
 
-sf::Texture* Assets::PassTexture(Asset type)
+sf::Texture *Assets::PassTexture(Asset type)
 {
-    for(auto t : allTextures.at(type))
+    for (auto t : allTextures.at(type))
     {
         return t;
-    } 
+    }
     return nullptr;
 }
-
