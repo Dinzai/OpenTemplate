@@ -14,6 +14,7 @@ SOURCES := \
 	playerBack.cpp \
 	playerLeft.cpp \
 	playerRight.cpp \
+	lightPillar.cpp \
     AssetLib.cpp
 
 HEADERS := AssetLib.h

@@ -13,6 +13,9 @@
 #include "attackRight.h"
 
 
+#include "lightPillar.h"
+
+
 struct AssetManager
 {
 
@@ -80,6 +83,12 @@ struct AssetManager
             temp->update(Player_AttackRight.pixel_data);
         }
 
+        if(data == THElightPillar)
+        {
+            temp->create(TheLight_Pillar.width, TheLight_Pillar.height);
+            temp->update(TheLight_Pillar.pixel_data);
+        }
+
         return temp;
     }
 
@@ -96,6 +105,7 @@ struct AssetManager
         attackBack,
         attackLeft,
         attackRight,
+        THElightPillar,
 
     };
 

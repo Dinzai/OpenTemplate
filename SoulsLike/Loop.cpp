@@ -22,8 +22,12 @@ void Loop::Init()
 
     managerLib = ManagerLib();
 
-    allLights = new AllLights();
-    managerLib.GetScene().AddToScene(Layers::LIGHTS, allLights);
+    light = new LightingPillar(*asset);
+    light->SetPosition(0, sf::Vector2f(200, 200));
+
+    managerLib.GetScene().AddToScene(Layers::BACKGROUND, light->currentView);
+    managerLib.GetScene().AddToScene(Layers::LIGHTS, light->lightComponent);
+    managerLib.GetCollisionManager().AddToCollisionManager(light->collision);
 
     player = new Player(*asset);
     player->SetPosition(200, 200);

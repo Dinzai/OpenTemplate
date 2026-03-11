@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Assets.h"
 #include "Manager.h"
-#include "Lighting.h"
+#include "LightPillar.h"
 #include "Player.h"
 
 class Loop
@@ -24,7 +24,7 @@ protected:
     Player* player;
     THEUI* ui;
     Player* otherTest;
-    AllLights* allLights;
+    LightingPillar* light;
 
     ManagerLib managerLib;
     

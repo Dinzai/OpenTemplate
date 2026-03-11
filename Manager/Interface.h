@@ -20,6 +20,7 @@ enum Asset
     PLAYERATTACKB,
     PLAYERATTACKL,
     PLAYERATTACKR,
+    LIGHTPILLARS,
 };
 
 enum Layers
