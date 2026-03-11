@@ -21,6 +21,12 @@ void Assets::Preload()
 
     Add(Asset::PLAYERROLLFB, "Asset/roll.png");
     Add(Asset::PLAYERROLLLR, "Asset/rollOther.png");
+
+    Add(Asset::PLAYERATTACKF, "Asset/attackFront.png");
+    Add(Asset::PLAYERATTACKB, "Asset/attackBack.png");
+    Add(Asset::PLAYERATTACKL, "Asset/attackLeft.png");
+    Add(Asset::PLAYERATTACKR, "Asset/attackRight.png");
+
 }
 
 sf::Texture *Assets::PassTexture(Asset type)

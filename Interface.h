@@ -16,6 +16,10 @@ enum Asset
     PLAYERR,
     PLAYERROLLFB,
     PLAYERROLLLR,
+    PLAYERATTACKF,
+    PLAYERATTACKB,
+    PLAYERATTACKL,
+    PLAYERATTACKR,
 };
 
 enum Layers
@@ -60,4 +64,26 @@ public:
     virtual void OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap) = 0;
 
     virtual void Update(sf::Time deltaTime) = 0;
+};
+
+class IStatus
+{
+public:
+    virtual sf::Vector2f GetPosition() = 0;
+    virtual sf::Vector2f GetValues() = 0;
+    virtual void SetChannel(int channel) = 0;
+
+
+    sf::Vector2f values;
+    int channel = 0;
+};
+
+class IApply
+{
+public:
+    virtual void SetPosition(sf::Vector2f position) = 0;
+    virtual void SetValues(sf::Vector2f values) = 0;
+    virtual void SetChannel(int channel) = 0;
+
+    int channel = 0;
 };

@@ -1,7 +1,62 @@
 #include "Player.h"
 
+THEUI::THEUI(float maxHealth, float maxStamina)
+{
+    this->maxHealth = maxHealth;
+    this->maxStamina = maxStamina;
+    currentHealth = this->maxHealth;
+    currentStamina = this->maxStamina;
+
+    sWidth = this->maxStamina;
+    sHeight = 20;
+
+    hWidth = this->maxHealth;
+    hHeight = 20;
+
+    healthPos = sf::Vector2f(100, 200);
+    staminaPos = sf::Vector2f(100, 250);
+
+    healthShape.setPosition(healthPos);
+    healthShape.setSize(sf::Vector2f(hWidth, hHeight));
+    healthShape.setFillColor(sf::Color::Red);
+
+    staminaShape.setPosition(staminaPos);
+    staminaShape.setSize(sf::Vector2f(sWidth, sHeight));
+    staminaShape.setFillColor(sf::Color::Green);
+
+    SetChannel(0);
+}
+
+void THEUI::SetPosition(sf::Vector2f position)
+{
+    healthShape.setPosition(position - sf::Vector2f(250, 100));
+    staminaShape.setPosition(position - sf::Vector2f(250, 80));
+}
+
+void THEUI::SetValues(sf::Vector2f values)
+{
+
+    currentHealth = values.x;
+    currentStamina = values.y;
+
+    healthShape.setSize(sf::Vector2f(currentHealth, 20));
+    staminaShape.setSize(sf::Vector2f(currentStamina, 20));
+}
+
+void THEUI::SetChannel(int channel)
+{
+    this->channel = channel;
+}
+
+void THEUI::Render(sf::RenderTarget &target)
+{
+    target.draw(healthShape);
+    target.draw(staminaShape);
+}
+
 Player::Player(Assets &asset)
 {
+
     SetTexture(asset, PLAYERF, 4, 2, 0.15f, 0, 4); // 0
     SetTexture(asset, PLAYERF, 4, 2, 0.15f, 4, 8);
 
@@ -19,6 +74,15 @@ Player::Player(Assets &asset)
 
     SetTexture(asset, PLAYERROLLLR, 4, 2, 0.15f, 0, 4); // L
     SetTexture(asset, PLAYERROLLLR, 4, 2, 0.15f, 4, 8); // R 10
+
+    SetTexture(asset, PLAYERATTACKF, 4, 1, 0.15f, 0, 4); // 11
+    SetTexture(asset, PLAYERATTACKB, 4, 1, 0.15f, 0, 4); // 12
+    SetTexture(asset, PLAYERATTACKR, 4, 1, 0.15f, 0, 4); // 13
+    SetTexture(asset, PLAYERATTACKL, 4, 1, 0.15f, 0, 4); // 14
+
+    SetChannel(0);
+
+    values = sf::Vector2f(health, stamina);
 }
 
 void Player::SetCamera(sf::RenderWindow &window)
@@ -42,6 +106,7 @@ void Player::SetPosition(float x, float y)
 
 void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 {
+
     if (coolDownTimer > 0 && direction.y == 1 && isStateRoll)
     {
         renderMap[Layers::ENTITY].push_back(viewables.at(8));
@@ -57,8 +122,14 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         currentView = viewables.at(0);
         isStateWalk = true;
     }
-
-    if (isStateWalk && !isMovingDown && lastDirection.y == 1)
+    if (isStateAttackDown)
+    {
+        renderMap[Layers::ENTITY].push_back(viewables.at(11));
+        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        currentView = viewables.at(0);
+        isStateWalk = true;
+    }
+    else if (!isStateAttackDown && isStateWalk && !isMovingDown && lastDirection.y == 1)
     {
         renderMap[Layers::ENTITY].push_back(viewables.at(0));
         renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
@@ -83,8 +154,14 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         currentView = viewables.at(0);
         isStateWalk = true;
     }
-
-    if (isStateWalk && !isMovingUp && lastDirection.y == -1)
+    if (isStateAttackUp)
+    {
+        renderMap[Layers::ENTITY].push_back(viewables.at(12));
+        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        currentView = viewables.at(0);
+        isStateWalk = true;
+    }
+    else if (isStateWalk && !isMovingUp && lastDirection.y == -1)
     {
         renderMap[Layers::ENTITY].push_back(viewables.at(2));
         renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
@@ -108,7 +185,15 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         isStateWalk = true;
     }
 
-    if (isStateWalk && !isMovingRight && lastDirection.x == 1)
+    if(isStateAttackRight)
+    {
+        renderMap[Layers::ENTITY].push_back(viewables.at(13));
+        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        currentView = viewables.at(0);
+        isStateWalk = true;
+    }
+
+    else if (isStateWalk && !isMovingRight && lastDirection.x == 1)
     {
         renderMap[Layers::ENTITY].push_back(viewables.at(4));
         renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
@@ -133,7 +218,15 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         isStateWalk = true;
     }
 
-    if (isStateWalk && !isMovingLeft && lastDirection.x == -1)
+    if(isStateAttackLeft)
+    {
+        renderMap[Layers::ENTITY].push_back(viewables.at(14));
+        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        currentView = viewables.at(0);
+        isStateWalk = true;
+    }
+
+    else if (isStateWalk && !isMovingLeft && lastDirection.x == -1)
     {
         renderMap[Layers::ENTITY].push_back(viewables.at(6));
         renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
@@ -184,4 +277,9 @@ void Player::Update(sf::Time deltaTime)
         view->texture2D->anim->Animate();
         view->texture2D->anim->GetSprite()->move(movement);
     }
+}
+
+sf::Vector2f Player::GetValues()
+{
+    return values;
 }

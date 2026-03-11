@@ -42,6 +42,11 @@ void InputManager::NotifyScene(std::map<Layers, std::vector<IDrawable*>>& render
     }
 }
 
+void InputManager::SendToMailers(IStatus* sender)
+{
+    sender->values.x = 20;
+}
+
 void InputManager::NotifyEvent()
 {
     for (auto l : listeners)
@@ -49,4 +54,5 @@ void InputManager::NotifyEvent()
         l->OnInput(keys);
         l->OnClick(buttons);
     }
+
 }

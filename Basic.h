@@ -50,15 +50,19 @@ struct CController : public IListen
     bool isMovingLeft = false;
     bool isMovingRight = false;
     
-    sf::Vector2f lastDirection = {0, 0};
+    sf::Vector2f lastDirection = {0, 1};
 
     bool initalStateRoll = false;
     bool isStateWalk = false;
     bool isStateRoll = false;
+    bool isStateAttackDown = false;
+    bool isStateAttackUp = false;
+    bool isStateAttackLeft = false;
+    bool isStateAttackRight = false;
 };
 
 // base is the base class for all Entity's in this game
-struct Base : public IKnock
+struct Base : public IKnock, IStatus
 {
 
     Base();
@@ -73,6 +77,10 @@ struct Base : public IKnock
 
     virtual void OnUpdateNormals() override;
     virtual void OnCollision(IKnock *other) override;
+
+    virtual sf::Vector2f GetPosition() override;
+    virtual sf::Vector2f GetValues() override;
+    virtual void SetChannel(int channel) override;
 
     std::vector<CView *> viewables;
     CView *currentView;

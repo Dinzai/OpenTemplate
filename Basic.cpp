@@ -39,7 +39,7 @@ void CView::SetView(sf::RenderWindow &window, const sf::Sprite &spr, sf::Vector2
 
     cameraView.setCenter(spr.getPosition() + shakeOffset);
 
-    window.setView(uiView);
+    // window.setView(uiView);
     window.setView(cameraView);
 }
 
@@ -49,6 +49,29 @@ CController::CController()
 
 void CController::OnClick(std::unordered_set<sf::Mouse::Button> buttons)
 {
+    isStateAttackDown = false;
+    isStateAttackUp = false;
+    isStateAttackLeft = false;
+    isStateAttackRight = false;
+    if (buttons.find(sf::Mouse::Button::Left) != buttons.end())
+    {
+        if (lastDirection.y == 1)
+        {
+            isStateAttackDown = true;
+        }
+        if (lastDirection.y == -1)
+        {
+            isStateAttackUp = true;
+        }
+        if (lastDirection.x == 1)
+        {
+            isStateAttackRight = true;
+        }
+        if (lastDirection.x == -1)
+        {
+            isStateAttackLeft = true;
+        }
+    }
 }
 
 void CController::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
@@ -138,4 +161,19 @@ void Base::OnUpdateNormals()
 void Base::OnCollision(IKnock *other)
 {
     collision->OnCollision(other);
+}
+
+sf::Vector2f Base::GetPosition()
+{
+    return currentView->texture2D->anim->GetSprite()->getPosition();
+}
+
+void Base::SetChannel(int channel)
+{
+    this->channel = channel;
+}
+
+sf::Vector2f Base::GetValues()
+{
+    return sf::Vector2f(0, 0);
 }
