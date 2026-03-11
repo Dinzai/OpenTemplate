@@ -1,10 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Assets.h"
-#include "Scene.h"
-#include "InputManager.h"
-#include "CollisionManager.h"
-#include "SignalManager.h"
+#include "Manager.h"
 #include "Player.h"
 
 class Loop
@@ -26,12 +23,9 @@ protected:
     Player* player;
     THEUI* ui;
     Player* otherTest;
+    ManagerLib managerLib;
     
     Assets* asset;
-    Scene scene;
-    InputManager manager; 
-    CollisionManager collisionManager;
-    SignalManager signalManager;
 
     sf::Time deltaTime;
     sf::Clock mainClock;

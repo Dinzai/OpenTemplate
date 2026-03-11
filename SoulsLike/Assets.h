@@ -1,5 +1,6 @@
 #pragma once
 #include "Interface.h"
+#include "AssetLib.h"
 
 class Assets : public IPreloadable
 {
@@ -11,7 +12,11 @@ public:
 
     void Add(Asset type, std::string name);
 
-    sf::Texture* PassTexture(Asset type);
+    void Add(Asset type);
+
+    sf::Texture *PassTexture(Asset type);
 
     std::map<Asset, std::vector<sf::Texture *>> allTextures;
+
+    AssetManager loader;
 };
