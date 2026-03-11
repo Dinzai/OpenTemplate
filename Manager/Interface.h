@@ -26,6 +26,7 @@ enum Layers
 {
     BACKGROUND,
     ENTITY,
+    LIGHTS,
     UI,
 };
 

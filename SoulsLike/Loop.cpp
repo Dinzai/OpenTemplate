@@ -22,6 +22,9 @@ void Loop::Init()
 
     managerLib = ManagerLib();
 
+    allLights = new AllLights();
+    managerLib.GetScene().AddToScene(Layers::LIGHTS, allLights);
+
     player = new Player(*asset);
     player->SetPosition(200, 200);
 
