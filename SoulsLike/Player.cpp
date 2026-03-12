@@ -24,7 +24,7 @@ THEUI::THEUI(float maxHealth, float maxStamina)
     staminaShape.setSize(sf::Vector2f(sWidth, sHeight));
     staminaShape.setFillColor(sf::Color::Green);
 
-    SetChannel(0);
+    SetChannel(1);
 }
 
 void THEUI::SetPosition(sf::Vector2f position)
@@ -80,7 +80,7 @@ Player::Player(Assets &asset)
     SetTexture(asset, PLAYERATTACKR, 4, 1, 0.15f, 0, 4); // 13
     SetTexture(asset, PLAYERATTACKL, 4, 1, 0.15f, 0, 4); // 14
 
-    SetChannel(0);
+    SetChannel(1);
 
     values = sf::Vector2f(health, stamina);
 }
@@ -109,30 +109,30 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     if (coolDownTimer > 0 && direction.y == 1 && isStateRoll)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(8));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(8));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
 
     else if (direction.y == 1 || (isMovingDown && !isStateWalk))
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(1));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(1));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
     if (isStateAttackDown)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(11));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(11));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
     else if (!isStateAttackDown && isStateWalk && !isMovingDown && lastDirection.y == 1)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(0));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(0));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = false;
     }
@@ -141,62 +141,62 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     if (coolDownTimer > 0 && direction.y == -1 && isStateRoll)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(8));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(8));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
 
     else if (direction.y == -1 || (isMovingUp && !isStateWalk))
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(3));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(3));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
     if (isStateAttackUp)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(12));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(12));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
     else if (isStateWalk && !isMovingUp && lastDirection.y == -1)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(2));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(2));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = false;
     }
     //-------------------------------------------------
     if (direction.x == 1 && isStateRoll)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(10));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(10));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
 
     else if (direction.x == 1 || (isMovingRight && !isStateWalk))
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(5));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(5));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
 
     if(isStateAttackRight)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(13));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(13));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
 
     else if (isStateWalk && !isMovingRight && lastDirection.x == 1)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(4));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(4));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = false;
     }
@@ -204,32 +204,32 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     //-------------------------------------------------
     if (direction.x == -1 && isStateRoll)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(9));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(9));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
 
     else if (direction.x == -1 || (isMovingLeft && !isStateWalk))
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(7));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(7));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
 
     if(isStateAttackLeft)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(14));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(14));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = true;
     }
 
     else if (isStateWalk && !isMovingLeft && lastDirection.x == -1)
     {
-        renderMap[Layers::ENTITY].push_back(viewables.at(6));
-        renderMap[Layers::ENTITY].erase(renderMap[Layers::ENTITY].begin() + 0);
+        renderMap[Layers::PLAYER].push_back(viewables.at(6));
+        renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         isStateWalk = false;
     }

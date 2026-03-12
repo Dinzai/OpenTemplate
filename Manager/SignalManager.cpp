@@ -2,16 +2,15 @@
 
 SignalManager::SignalManager()
 {
-
 }
 
-void SignalManager::AddToMailer(IStatus* sent)
+void SignalManager::AddToMailer(IStatus *sent)
 {
     sendersChannels.push_back(sent->channel);
-    senders.push_back(sent);    
+    senders.push_back(sent);
 }
 
-void SignalManager::AddToSubscibed(IApply* recieved)
+void SignalManager::AddToSubscibed(IApply *recieved)
 {
     recieversChannels.push_back(recieved->channel);
     recievers.push_back(recieved);
@@ -19,18 +18,17 @@ void SignalManager::AddToSubscibed(IApply* recieved)
 
 void SignalManager::Update()
 {
-    for(int channelS : sendersChannels)
+
+    for(size_t i = 0; i < recievers.size(); i++)
     {
-        for(int channelR : recieversChannels)
+        for(size_t j = 0; j < senders.size(); j++)
         {
-            if(channelS != channelR)
+            if(recieversChannels.at(i) == sendersChannels.at(j))
             {
-                return;
+                recievers.at(i)->SetPosition(senders.at(j)->GetPosition());
+                recievers.at(i)->SetValues(senders.at(j)->GetValues());
             }
-
-            recievers.at(channelR)->SetPosition(senders.at(channelS)->GetPosition());
-            recievers.at(channelR)->SetValues(senders.at(channelS)->GetValues());           
-
         }
-    }   
+    }
+
 }

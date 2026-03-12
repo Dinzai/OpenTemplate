@@ -25,8 +25,9 @@ void Loop::Init()
     light = new LightingPillar(*asset);
     light->SetPosition(0, sf::Vector2f(200, 200));
 
-    managerLib.GetScene().AddToScene(Layers::BACKGROUND, light->currentView);
+    managerLib.GetScene().AddToScene(Layers::ENTITY, light->currentView);
     managerLib.GetScene().AddToScene(Layers::LIGHTS, light->lightComponent);
+
     managerLib.GetCollisionManager().AddToCollisionManager(light->collision);
 
     player = new Player(*asset);
@@ -35,19 +36,18 @@ void Loop::Init()
     ui = new THEUI(player->health, player->stamina);
     managerLib.GetScene().AddToScene(Layers::UI, ui);
 
+    managerLib.GetSignalManager().AddToMailer(light);
+    managerLib.GetSignalManager().AddToSubscibed(light->lightComponent->lights.at(0));
+
     managerLib.GetSignalManager().AddToMailer(player);
     managerLib.GetSignalManager().AddToSubscibed(ui);
 
-    otherTest = new Player(*asset);
-    otherTest->SetPosition(500, 500);
-
     managerLib.GetInputManager().AddToListeners(player);
-    managerLib.GetCollisionManager().AddToCollisionManager(player->collision);
-    managerLib.GetScene().AddToScene(Layers::ENTITY, player->currentView);
-    managerLib.GetScene().AddToCamera(player);
 
-    managerLib.GetCollisionManager().AddToCollisionManager(otherTest->collision);
-    managerLib.GetScene().AddToScene(Layers::BACKGROUND, otherTest->currentView);
+    managerLib.GetCollisionManager().AddToCollisionManager(player->collision);
+
+    managerLib.GetScene().AddToScene(Layers::PLAYER, player->currentView);
+    managerLib.GetScene().AddToCamera(player);
 }
 
 void Loop::FixedUpdate()
@@ -79,7 +79,7 @@ void Loop::FixedUpdate()
 
             if (event.key.code == sf::Keyboard::H)
             {
-                managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(0));
+                managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(1));
             }
 
             managerLib.GetInputManager().KeyDown(event.key.code);
@@ -96,18 +96,24 @@ void Loop::FixedUpdate()
 void Loop::Update()
 {
     deltaTime = mainClock.getElapsedTime();
+
     managerLib.GetInputManager().GetDeltaTime(deltaTime);
     managerLib.GetInputManager().NotifyScene(managerLib.GetScene().renderMap);
+
     managerLib.GetCollisionManager().UpdateNormals();
     managerLib.GetCollisionManager().CheckCollisions();
+
     managerLib.GetSignalManager().Update();
+
     mainClock.restart();
 }
 
 void Loop::Render()
 {
     window.clear();
+
     managerLib.GetScene().CameraFollow(window);
     managerLib.GetScene().RenderAll(window);
+
     window.display();
 }

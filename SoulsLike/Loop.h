@@ -23,7 +23,6 @@ protected:
 
     Player* player;
     THEUI* ui;
-    Player* otherTest;
     LightingPillar* light;
 
     ManagerLib managerLib;

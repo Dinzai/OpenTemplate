@@ -175,12 +175,12 @@ void CCollideable::ResolveCollision(CCollideable *other)
 
     if (!result.collided)
         return;
-/*
+
     for (sf::Sprite *spr : ptrToSprites)
     {
         spr->move(result.mtv * 0.5f);
     }
-    */
+    
 
     for (sf::Sprite *spr : other->ptrToSprites)
     {
@@ -203,13 +203,3 @@ void CCollideable::OnCollision(IKnock *other)
 
     ResolveCollision(collider);
 }
-/*
-void CCollideable::OnCollision(IKnock *other)
-{
-    if (CollisionDetection(other))
-    {
-        std::cout << "yo" << '\n';
-        ptrToSprite->move(200, 50);
-    }
-}
-*/

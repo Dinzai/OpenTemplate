@@ -26,6 +26,7 @@ enum Asset
 enum Layers
 {
     BACKGROUND,
+    PLAYER,
     ENTITY,
     LIGHTS,
     UI,

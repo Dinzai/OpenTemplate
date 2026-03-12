@@ -6,6 +6,7 @@ LightingPillar::LightingPillar(Assets& asset)
     lightComponent = new AllLights();
     CLight* temp = new CLight(250, 169, 30, 30);
     lightComponent->AddToLights(temp);
+    SetChannel(0);
 }
 
 void LightingPillar::SetPosition(int index, sf::Vector2f position)
@@ -13,3 +14,4 @@ void LightingPillar::SetPosition(int index, sf::Vector2f position)
     GetActiveSprite()->setPosition(position);
     lightComponent->SetPosition(index, position);
 }
+
