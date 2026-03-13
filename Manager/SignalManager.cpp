@@ -6,13 +6,13 @@ SignalManager::SignalManager()
 
 void SignalManager::AddToMailer(IStatus *sent)
 {
-    sendersChannels.push_back(sent->channel);
+    sendersChannels.push_back(sent->senderChannel);
     senders.push_back(sent);
 }
 
 void SignalManager::AddToSubscibed(IApply *recieved)
 {
-    recieversChannels.push_back(recieved->channel);
+    recieversChannels.push_back(recieved->recieverChannel);
     recievers.push_back(recieved);
 }
 

@@ -36,6 +36,7 @@ void Assets::Preload()
     Add(Asset::PLAYERATTACKL);
     Add(Asset::PLAYERATTACKR);
     Add(Asset::LIGHTPILLARS);
+    Add(Asset::SQUIDENEMY);
 
 }
 

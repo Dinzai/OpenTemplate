@@ -14,6 +14,7 @@
 
 
 #include "lightPillar.h"
+#include "squidEnemy.h"
 
 
 struct AssetManager
@@ -88,6 +89,11 @@ struct AssetManager
             temp->create(TheLight_Pillar.width, TheLight_Pillar.height);
             temp->update(TheLight_Pillar.pixel_data);
         }
+        if(data == SquidEnemy)
+        {
+            temp->create(Squid_Enemy.width, Squid_Enemy.height);
+            temp->update(Squid_Enemy.pixel_data);
+        }
 
         return temp;
     }
@@ -106,6 +112,7 @@ struct AssetManager
         attackLeft,
         attackRight,
         THElightPillar,
+        SquidEnemy,
 
     };
 

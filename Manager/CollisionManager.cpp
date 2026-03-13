@@ -29,7 +29,6 @@ void CollisionManager::CheckCollisions()
             if(tempA != tempB)
             {
                 tempA->OnCollision(tempB);
-                tempB->OnCollision(tempA);
             }
         }
         

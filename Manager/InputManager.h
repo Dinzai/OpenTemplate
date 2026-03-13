@@ -23,7 +23,7 @@ public:
 
     void NotifyScene(std::map<Layers, std::vector<IDrawable*>>& renderMap);
 
-    void SendToMailers(IStatus* sender);
+    void SendToMailers(IStatus* damager, IStatus* damagee);
 
     void NotifyEvent();
 

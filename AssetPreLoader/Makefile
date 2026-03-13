@@ -15,6 +15,7 @@ SOURCES := \
 	playerLeft.cpp \
 	playerRight.cpp \
 	lightPillar.cpp \
+	squidEnemy.cpp \
     AssetLib.cpp
 
 HEADERS := AssetLib.h

@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Assets.h"
 #include "Manager.h"
-#include "LightPillar.h"
-#include "Player.h"
+#include "GameObjects.h"
+
 
 class Loop
 {
@@ -21,9 +21,15 @@ protected:
 
     void Render();
 
-    Player* player;
-    THEUI* ui;
-    LightingPillar* light;
+    void AddToScene();
+
+    void AddToInputManager();
+
+    void AddToSignalManager();
+
+    void AddToCollisionManager();
+
+    GameObject gameObjects;
 
     ManagerLib managerLib;
     

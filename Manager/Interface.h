@@ -21,6 +21,7 @@ enum Asset
     PLAYERATTACKL,
     PLAYERATTACKR,
     LIGHTPILLARS,
+    SQUIDENEMY,
 };
 
 enum Layers
@@ -57,6 +58,30 @@ public:
     virtual void OnCollision(IKnock *other) = 0;
 };
 
+class IStatus
+{
+public:
+    virtual sf::Vector2f GetPosition() = 0;
+    virtual sf::Vector2f GetValues() = 0;
+    virtual void SetSenderChannel(int channel) = 0;
+
+
+    sf::Vector2f values;
+    float sentDamage = 0;
+    int senderChannel = 0;
+};
+
+class IApply
+{
+public:
+    virtual void SetPosition(sf::Vector2f position) = 0;
+    virtual void SetValues(sf::Vector2f values) = 0;
+    virtual void SetRecieverChannel(int channel) = 0;
+
+    float receivedDamage = 0;
+    int recieverChannel = 0;
+};
+
 class IListen
 {
 public:
@@ -66,27 +91,7 @@ public:
 
     virtual void OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap) = 0;
 
+    virtual void OnDamage(IStatus* damager, IStatus* damagee) = 0;
+
     virtual void Update(sf::Time deltaTime) = 0;
-};
-
-class IStatus
-{
-public:
-    virtual sf::Vector2f GetPosition() = 0;
-    virtual sf::Vector2f GetValues() = 0;
-    virtual void SetChannel(int channel) = 0;
-
-
-    sf::Vector2f values;
-    int channel = 0;
-};
-
-class IApply
-{
-public:
-    virtual void SetPosition(sf::Vector2f position) = 0;
-    virtual void SetValues(sf::Vector2f values) = 0;
-    virtual void SetChannel(int channel) = 0;
-
-    int channel = 0;
 };

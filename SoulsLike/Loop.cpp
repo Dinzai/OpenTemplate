@@ -17,37 +17,51 @@ void Loop::Play()
     }
 }
 
+void Loop::AddToCollisionManager()
+{
+    managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetLight()->collision);
+    managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetEnemy()->collision);
+    managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetPlayer()->collision);
+}
+
+void Loop::AddToInputManager()
+{
+    managerLib.GetInputManager().AddToListeners(gameObjects.GetPlayer());
+}
+
+void Loop::AddToScene()
+{
+    managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetLight()->currentView);
+    managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetLight()->lightComponent);
+    managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetEnemy()->currentView);
+    managerLib.GetScene().AddToScene(Layers::UI, gameObjects.GetPlayerUI());
+    managerLib.GetScene().AddToScene(Layers::UI, gameObjects.GetEnemyUI());
+    managerLib.GetScene().AddToScene(Layers::PLAYER, gameObjects.GetPlayer()->currentView);
+    managerLib.GetScene().AddToCamera(gameObjects.GetPlayer());
+}
+
+void Loop::AddToSignalManager()
+{
+    managerLib.GetSignalManager().AddToMailer(gameObjects.GetLight());
+    managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetLight()->lightComponent->lights.at(0));
+
+    managerLib.GetSignalManager().AddToMailer(gameObjects.GetPlayer());
+    managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetPlayerUI());
+
+    managerLib.GetSignalManager().AddToMailer(gameObjects.GetEnemy());
+    managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetEnemyUI());
+}
+
 void Loop::Init()
 {
-
     managerLib = ManagerLib();
+    gameObjects = GameObject();
+    gameObjects.Init(*asset);
 
-    light = new LightingPillar(*asset);
-    light->SetPosition(0, sf::Vector2f(200, 200));
-
-    managerLib.GetScene().AddToScene(Layers::ENTITY, light->currentView);
-    managerLib.GetScene().AddToScene(Layers::LIGHTS, light->lightComponent);
-
-    managerLib.GetCollisionManager().AddToCollisionManager(light->collision);
-
-    player = new Player(*asset);
-    player->SetPosition(200, 200);
-
-    ui = new THEUI(player->health, player->stamina);
-    managerLib.GetScene().AddToScene(Layers::UI, ui);
-
-    managerLib.GetSignalManager().AddToMailer(light);
-    managerLib.GetSignalManager().AddToSubscibed(light->lightComponent->lights.at(0));
-
-    managerLib.GetSignalManager().AddToMailer(player);
-    managerLib.GetSignalManager().AddToSubscibed(ui);
-
-    managerLib.GetInputManager().AddToListeners(player);
-
-    managerLib.GetCollisionManager().AddToCollisionManager(player->collision);
-
-    managerLib.GetScene().AddToScene(Layers::PLAYER, player->currentView);
-    managerLib.GetScene().AddToCamera(player);
+    AddToInputManager();
+    AddToCollisionManager();
+    AddToSignalManager();
+    AddToScene();
 }
 
 void Loop::FixedUpdate()
@@ -77,11 +91,6 @@ void Loop::FixedUpdate()
                 window.close();
             }
 
-            if (event.key.code == sf::Keyboard::H)
-            {
-                managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(1));
-            }
-
             managerLib.GetInputManager().KeyDown(event.key.code);
         }
 
@@ -96,7 +105,8 @@ void Loop::FixedUpdate()
 void Loop::Update()
 {
     deltaTime = mainClock.getElapsedTime();
-
+    // SendToMailers needs to loop through all senders, and recivers, to check for damage messeges
+    managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(1), managerLib.GetSignalManager().senders.at(2));
     managerLib.GetInputManager().GetDeltaTime(deltaTime);
     managerLib.GetInputManager().NotifyScene(managerLib.GetScene().renderMap);
 

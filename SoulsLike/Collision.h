@@ -78,14 +78,14 @@ private:
 
     CollisionHelper DotPointsToAxis(sf::Vector2f &axis);
 
-    CollisionResult CollisionDetectionWithResolution(CCollideable* other);
+    CollisionResult CollisionDetectionWithResolution(CCollideable *other);
 
-    void ResolveCollision(CCollideable* other);
+    void ResolveCollision(CCollideable *other);
 
 public:
     void CalculateEdgeNormals();
 
-    void AddTo(sf::Sprite* sprite);
+    void AddTo(sf::Sprite *sprite);
 
     bool CollisionDetection(IKnock *other);
 
@@ -93,10 +93,10 @@ public:
 
     virtual void OnUpdateNormals() override;
 
+    bool isColliding;
+
 private:
     std::vector<sf::Vector2f> normals;
 
-    std::vector<sf::Sprite*> ptrToSprites;
-
-    bool isColliding;
+    std::vector<sf::Sprite *> ptrToSprites;
 };

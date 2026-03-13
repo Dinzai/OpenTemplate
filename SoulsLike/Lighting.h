@@ -18,7 +18,7 @@ struct CLight : public IApply
         lightShape.setPosition(radius, radius);
         lightShape.setRadius(radius);
         sprite.setTexture(lightTexture.getTexture());
-        SetChannel(0);
+        SetRecieverChannel(0);
     }
 
     void SetPosition(sf::Vector2f position) override
@@ -30,9 +30,9 @@ struct CLight : public IApply
     {
     }
 
-    void SetChannel(int channel) override
+    void SetRecieverChannel(int channel) override
     {
-        this->channel = channel;
+        this->recieverChannel = channel;
     }
 
     void Draw(sf::RenderTarget &target)

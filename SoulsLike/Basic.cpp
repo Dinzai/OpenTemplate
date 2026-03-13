@@ -49,27 +49,35 @@ CController::CController()
 
 void CController::OnClick(std::unordered_set<sf::Mouse::Button> buttons)
 {
+
+    initialStateAttack = false;
+
     isStateAttackDown = false;
     isStateAttackUp = false;
     isStateAttackLeft = false;
     isStateAttackRight = false;
+    
     if (buttons.find(sf::Mouse::Button::Left) != buttons.end())
     {
         if (lastDirection.y == 1)
         {
-            isStateAttackDown = true;
+            initialStateAttack = true;
+            //isStateAttackDown = true;
         }
         if (lastDirection.y == -1)
         {
-            isStateAttackUp = true;
+            initialStateAttack = true;
+            //isStateAttackUp = true;
         }
         if (lastDirection.x == 1)
         {
-            isStateAttackRight = true;
+            initialStateAttack = true;
+            //isStateAttackRight = true;
         }
         if (lastDirection.x == -1)
         {
-            isStateAttackLeft = true;
+            initialStateAttack = true;
+            //isStateAttackLeft = true;
         }
     }
 }
@@ -82,6 +90,7 @@ void CController::OnInput(std::unordered_set<sf::Keyboard::Key> keys)
 {
     direction = {0, 0};
     initalStateRoll = false;
+    
 
     if (keys.find(sf::Keyboard::W) != keys.end())
     {
@@ -115,9 +124,69 @@ void CController::OnInput(std::unordered_set<sf::Keyboard::Key> keys)
     isMovingRight = direction.x == 1;
 }
 
+void CController::OnDamage(IStatus* damager, IStatus* damagee)
+{
+}
+
 void CController::Update(sf::Time deltaTime)
 {
 }
+
+
+THEUI::THEUI(float maxHealth, float maxStamina)
+{
+    this->maxHealth = maxHealth;
+    this->maxStamina = maxStamina;
+    currentHealth = this->maxHealth;
+    currentStamina = this->maxStamina;
+
+    sWidth = this->maxStamina;
+    sHeight = 2;
+
+    hWidth = this->maxHealth;
+    hHeight = 2;
+
+    healthPos = sf::Vector2f(100, 200);
+    staminaPos = sf::Vector2f(100, 250);
+
+    healthShape.setPosition(healthPos);
+    healthShape.setSize(sf::Vector2f(hWidth, hHeight));
+    healthShape.setFillColor(sf::Color::Red);
+
+    staminaShape.setPosition(staminaPos);
+    staminaShape.setSize(sf::Vector2f(sWidth, sHeight));
+    staminaShape.setFillColor(sf::Color::Green);
+
+    //SetRecieverChannel(1);
+}
+
+void THEUI::SetPosition(sf::Vector2f position)
+{
+    healthShape.setPosition(position - sf::Vector2f(-5, 5));
+    staminaShape.setPosition(position - sf::Vector2f(-5, 2));
+}
+
+void THEUI::SetValues(sf::Vector2f values)
+{
+
+    currentHealth = values.x / 10;
+    currentStamina = values.y / 10;
+
+    healthShape.setSize(sf::Vector2f(currentHealth, hHeight));
+    staminaShape.setSize(sf::Vector2f(currentStamina, sHeight));
+}
+
+void THEUI::SetRecieverChannel(int channel)
+{
+    this->recieverChannel = channel;
+}
+
+void THEUI::Render(sf::RenderTarget &target)
+{
+    target.draw(healthShape);
+    target.draw(staminaShape);
+}
+
 
 Base::Base()
 {
@@ -168,9 +237,9 @@ sf::Vector2f Base::GetPosition()
     return currentView->texture2D->anim->GetSprite()->getPosition();
 }
 
-void Base::SetChannel(int channel)
+void Base::SetSenderChannel(int channel)
 {
-    this->channel = channel;
+    this->senderChannel = channel;
 }
 
 sf::Vector2f Base::GetValues()

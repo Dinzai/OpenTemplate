@@ -41,6 +41,8 @@ struct CController : public IListen
 
     virtual void OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap) override;
 
+    virtual void OnDamage(IStatus* damager, IStatus* damagee) override;
+
     virtual void Update(sf::Time deltaTime);
 
     sf::Vector2f direction = {0, 0};
@@ -55,10 +57,48 @@ struct CController : public IListen
     bool initalStateRoll = false;
     bool isStateWalk = false;
     bool isStateRoll = false;
+
+    bool initialStateAttack = false;
+
     bool isStateAttackDown = false;
     bool isStateAttackUp = false;
     bool isStateAttackLeft = false;
     bool isStateAttackRight = false;
+};
+
+struct THEUI : public IDrawable, IApply
+{
+    THEUI(float maxHealth, float maxStamina);
+
+    virtual void SetPosition(sf::Vector2f position) override;
+
+    virtual void SetValues(sf::Vector2f values) override;
+
+    virtual void SetRecieverChannel(int channel) override;
+    
+    virtual void Render(sf::RenderTarget& target) override;
+    
+    float sWidth;
+    float sHeight;
+
+    float maxStamina;
+    float currentStamina;
+
+    float hWidth;
+    float hHeight;
+
+    float maxHealth;
+    float currentHealth;
+
+    sf::View uiView;
+
+    sf::Vector2f healthPos;
+    sf::Vector2f staminaPos;
+
+    sf::RectangleShape healthShape;
+    sf::RectangleShape staminaShape;
+
+
 };
 
 // base is the base class for all Entity's in this game
@@ -80,7 +120,7 @@ struct Base : public IKnock, IStatus
 
     virtual sf::Vector2f GetPosition() override;
     virtual sf::Vector2f GetValues() override;
-    virtual void SetChannel(int channel) override;
+    virtual void SetSenderChannel(int channel) override;
 
     std::vector<CView *> viewables;
     CView *currentView;

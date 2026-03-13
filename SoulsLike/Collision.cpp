@@ -163,6 +163,7 @@ CollisionResult CCollideable::CollisionDetectionWithResolution(CCollideable *oth
     }
 
     result.collided = true;
+    
 
     result.mtv = smallestAxis * smallestOverlap;
 
@@ -175,18 +176,20 @@ void CCollideable::ResolveCollision(CCollideable *other)
 
     if (!result.collided)
         return;
-
-    for (sf::Sprite *spr : ptrToSprites)
-    {
-        spr->move(result.mtv * 0.5f);
-    }
+    isColliding = result.collided;
+    other->isColliding = result.collided;
+    //std::cout << "collided" << isColliding << '\n';
     
+
+    //for (sf::Sprite *spr : ptrToSprites)
+    //{
+        //spr->move(result.mtv * 0.5f);
+    //}
 
     for (sf::Sprite *spr : other->ptrToSprites)
     {
         spr->move(-result.mtv * 0.5f);
     }
-    
 }
 
 void CCollideable::OnUpdateNormals()
