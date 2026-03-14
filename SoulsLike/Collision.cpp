@@ -83,6 +83,14 @@ bool CCollideable::CollisionDetection(IKnock *kOther)
         return false;
     }
 
+    if (!ptrToSprites.at(0)->getGlobalBounds().intersects(
+            other->ptrToSprites.at(0)->getGlobalBounds()))
+    {
+        this->isColliding = false;
+        other->isColliding = false;
+        return false;
+    }
+
     std::vector<sf::Vector2f> axies;
     for (sf::Vector2f normal : normals)
     {
@@ -122,6 +130,15 @@ bool CCollideable::CollisionDetection(IKnock *kOther)
 CollisionResult CCollideable::CollisionDetectionWithResolution(CCollideable *other)
 {
     CollisionResult result;
+
+    if (!ptrToSprites.at(0)->getGlobalBounds().intersects(
+            other->ptrToSprites.at(0)->getGlobalBounds()))
+    {
+        this->isColliding = false;
+        other->isColliding = false;
+        result.collided = false;
+        return result;
+    }
 
     float smallestOverlap = INFINITY;
     sf::Vector2f smallestAxis;
@@ -163,7 +180,6 @@ CollisionResult CCollideable::CollisionDetectionWithResolution(CCollideable *oth
     }
 
     result.collided = true;
-    
 
     result.mtv = smallestAxis * smallestOverlap;
 
@@ -178,12 +194,11 @@ void CCollideable::ResolveCollision(CCollideable *other)
         return;
     isColliding = result.collided;
     other->isColliding = result.collided;
-    //std::cout << "collided" << isColliding << '\n';
-    
+    // std::cout << "collided" << isColliding << '\n';
 
-    //for (sf::Sprite *spr : ptrToSprites)
+    // for (sf::Sprite *spr : ptrToSprites)
     //{
-        //spr->move(result.mtv * 0.5f);
+    // spr->move(result.mtv * 0.5f);
     //}
 
     for (sf::Sprite *spr : other->ptrToSprites)

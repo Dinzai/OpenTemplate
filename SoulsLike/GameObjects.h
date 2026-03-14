@@ -12,17 +12,13 @@ public:
 
     Player* GetPlayer();
     THEUI* GetPlayerUI();
-    Enemy* GetEnemy();
-    THEUI* GetEnemyUI();
+    AllEnemies* GetEnemies();
     LightingPillar* GetLight();
 
 
 private:
     Player *player;
     THEUI *playerUI;
-
-    Enemy *enemy;
-    THEUI *enemyUI;
-
+    AllEnemies *allEnemies;
     LightingPillar *light;
 };

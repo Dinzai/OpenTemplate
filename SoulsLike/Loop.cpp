@@ -1,8 +1,8 @@
 #include "Loop.h"
-#include <iostream>
 
 Loop::Loop() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Souls_Like")
 {
+    // allocate Assets
     asset = new Assets();
 }
 
@@ -16,30 +16,45 @@ void Loop::Play()
         Render();
     }
 }
-
+// collision
 void Loop::AddToCollisionManager()
 {
     managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetLight()->collision);
-    managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetEnemy()->collision);
-    managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetPlayer()->collision);
-}
 
+    managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetPlayer()->collision);
+
+    for (size_t i = 0; i < gameObjects.GetEnemies()->allSquidEnemies.size(); i++)
+    {
+        managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetEnemies()->allSquidEnemies.at(i)->collision);
+    }
+}
+// input
 void Loop::AddToInputManager()
 {
     managerLib.GetInputManager().AddToListeners(gameObjects.GetPlayer());
 }
-
+// scene
 void Loop::AddToScene()
 {
     managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetLight()->currentView);
     managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetLight()->lightComponent);
-    managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetEnemy()->currentView);
-    managerLib.GetScene().AddToScene(Layers::UI, gameObjects.GetPlayerUI());
-    managerLib.GetScene().AddToScene(Layers::UI, gameObjects.GetEnemyUI());
-    managerLib.GetScene().AddToScene(Layers::PLAYER, gameObjects.GetPlayer()->currentView);
-    managerLib.GetScene().AddToCamera(gameObjects.GetPlayer());
-}
 
+    managerLib.GetScene().AddToCamera(gameObjects.GetPlayer());
+    managerLib.GetScene().AddToScene(Layers::PLAYER, gameObjects.GetPlayer()->currentView);
+    managerLib.GetScene().AddToScene(Layers::UI, gameObjects.GetPlayerUI());
+
+    for (size_t i = 0; i < gameObjects.GetEnemies()->allSquidEnemies.size(); i++)
+    {
+        managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetEnemies()->allSquidEnemies.at(i)->currentView);
+    }
+
+    for (size_t i = 0; i < gameObjects.GetEnemies()->allSquidEnemyUI.size(); i++)
+    {
+        managerLib.GetScene().AddToScene(Layers::UI, gameObjects.GetEnemies()->allSquidEnemyUI.at(i));
+    }
+    
+}
+// signal
 void Loop::AddToSignalManager()
 {
     managerLib.GetSignalManager().AddToMailer(gameObjects.GetLight());
@@ -48,8 +63,15 @@ void Loop::AddToSignalManager()
     managerLib.GetSignalManager().AddToMailer(gameObjects.GetPlayer());
     managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetPlayerUI());
 
-    managerLib.GetSignalManager().AddToMailer(gameObjects.GetEnemy());
-    managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetEnemyUI());
+    for (size_t i = 0; i < gameObjects.GetEnemies()->allSquidEnemies.size(); i++)
+    {
+        managerLib.GetSignalManager().AddToMailer(gameObjects.GetEnemies()->allSquidEnemies.at(i));
+    }
+
+    for (size_t i = 0; i < gameObjects.GetEnemies()->allSquidEnemyUI.size(); i++)
+    {
+        managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetEnemies()->allSquidEnemyUI.at(i));
+    }
 }
 
 void Loop::Init()
@@ -106,7 +128,11 @@ void Loop::Update()
 {
     deltaTime = mainClock.getElapsedTime();
     // SendToMailers needs to loop through all senders, and recivers, to check for damage messeges
-    managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(1), managerLib.GetSignalManager().senders.at(2));
+    for(size_t i = 2; i < managerLib.GetSignalManager().senders.size(); i++)
+    {
+        managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(1), managerLib.GetSignalManager().senders.at(i));
+    }
+    
     managerLib.GetInputManager().GetDeltaTime(deltaTime);
     managerLib.GetInputManager().NotifyScene(managerLib.GetScene().renderMap);
 

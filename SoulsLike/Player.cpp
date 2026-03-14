@@ -29,7 +29,7 @@ Player::Player(Assets &asset)
     SetSenderChannel(1);
 
     values = sf::Vector2f(health, stamina);
-    sentDamage = 0.005f;
+    sentDamage = 0.1f;
 }
 
 void Player::SetCamera(sf::RenderWindow &window)
@@ -53,12 +53,18 @@ void Player::SetPosition(float x, float y)
 
 void Player::OnDamage(IStatus *damager, IStatus *damagee)
 {
-    Base* temp = dynamic_cast<Base *>(damagee);
-
-    if (canDamage && collision->isColliding && temp->collision->isColliding)
+    Base *temp = dynamic_cast<Base *>(damagee);
+    if (!temp)
     {
-        if (damagee->senderChannel == 2)
+        return;
+    }
+
+    if (canDamage && collision->CollisionDetection(temp->collision))
+    {
+        
+        if (damagee->senderChannel >= 2)
         {
+            
             damagee->values.x -= sentDamage;
             canDamage = false;
         }
@@ -68,7 +74,7 @@ void Player::OnDamage(IStatus *damager, IStatus *damagee)
 void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 {
 
-    if (coolDownTimer > 0 && direction.y == 1 && isStateRoll)
+    if (coolDownTimer == 0.5 && direction.y == 1 && isStateRoll)
     {
         renderMap[Layers::PLAYER].push_back(viewables.at(8));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
@@ -85,7 +91,7 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         canDamage = false;
         isStateWalk = true;
     }
-    if (coolDownTimer > 0 && isStateAttackDown)
+    if (coolDownTimer == 0.5 && isStateAttackDown)
     {
         renderMap[Layers::PLAYER].push_back(viewables.at(11));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
@@ -104,7 +110,7 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     //------------------------------------------------------------------------
 
-    if (coolDownTimer > 0 && direction.y == -1 && isStateRoll)
+    if (coolDownTimer == 0.5 && direction.y == -1 && isStateRoll)
     {
         renderMap[Layers::PLAYER].push_back(viewables.at(8));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
@@ -121,7 +127,7 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         canDamage = false;
         isStateWalk = true;
     }
-    if (coolDownTimer > 0 && isStateAttackUp)
+    if (coolDownTimer == 0.5 && isStateAttackUp)
     {
         renderMap[Layers::PLAYER].push_back(viewables.at(12));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
@@ -138,7 +144,7 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         isStateWalk = false;
     }
     //-------------------------------------------------
-    if (direction.x == 1 && isStateRoll)
+    if (coolDownTimer == 0.5 && direction.x == 1 && isStateRoll)
     {
         renderMap[Layers::PLAYER].push_back(viewables.at(10));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
@@ -156,7 +162,7 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         isStateWalk = true;
     }
 
-    if (coolDownTimer > 0 && isStateAttackRight)
+    if (coolDownTimer == 0.5 && isStateAttackRight)
     {
         renderMap[Layers::PLAYER].push_back(viewables.at(13));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
@@ -175,7 +181,7 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     }
 
     //-------------------------------------------------
-    if (direction.x == -1 && isStateRoll)
+    if (coolDownTimer == 0.5 && direction.x == -1 && isStateRoll)
     {
         renderMap[Layers::PLAYER].push_back(viewables.at(9));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
@@ -193,7 +199,7 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
         isStateWalk = true;
     }
 
-    if (coolDownTimer > 0 && isStateAttackLeft)
+    if (coolDownTimer == 0.5 && isStateAttackLeft)
     {
         renderMap[Layers::PLAYER].push_back(viewables.at(14));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
@@ -219,10 +225,14 @@ void Player::Update(sf::Time deltaTime)
     {
         isStateRoll = true;
         rollDuration -= deltaTime.asSeconds();
+        if (values.y > 0)
+        {
+            values.y -= 0.1f;
+        }
         speed = 500;
         if (rollDuration <= 0)
         {
-
+            values.y = 0;
             coolDownTimer = 0;
             coolDownIsReady = false;
             initalStateRoll = false;
@@ -233,33 +243,46 @@ void Player::Update(sf::Time deltaTime)
         isStateRoll = false;
         speed = 200;
         coolDownTimer += deltaTime.asSeconds();
+        if (values.y < 75)
+        {
+            values.y += 0.1f;
+        }
         if (coolDownTimer >= 0.5)
         {
             rollDuration = 0.25;
+            values.y = 75;
             coolDownIsReady = true;
             coolDownTimer = 0.5;
         }
     }
-//-----------
+    //-----------
+
+    if(canDamage)
+    {
+        values.y = 0.0f;
+    }
+
     if (initialStateAttack && coolDownIsReady)
     {
-        if(lastDirection.y == 1)
+        attackDuration -= deltaTime.asSeconds();
+
+        if (lastDirection.y == 1)
         {
             isStateAttackDown = true;
         }
-        else if(lastDirection.y == -1)
+        else if (lastDirection.y == -1)
         {
             isStateAttackUp = true;
         }
-        else if(lastDirection.x == 1)
+        else if (lastDirection.x == 1)
         {
             isStateAttackRight = true;
         }
-        else if(lastDirection.x == -1)
+        else if (lastDirection.x == -1)
         {
             isStateAttackLeft = true;
         }
-        attackDuration -= deltaTime.asSeconds();
+
         if (attackDuration <= 0)
         {
             coolDownTimer = 0;

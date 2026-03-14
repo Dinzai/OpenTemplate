@@ -16,3 +16,13 @@ struct Enemy : public Base
     float stamina = 75;
 
 };
+
+struct AllEnemies 
+{
+    AllEnemies(Assets& asset);
+
+    void AddToEnemies(Assets& asset, int amount);
+
+    std::vector<Enemy*> allSquidEnemies;
+    std::vector<THEUI*> allSquidEnemyUI;
+};

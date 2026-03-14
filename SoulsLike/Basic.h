@@ -3,6 +3,7 @@
 #include "Assets.h"
 #include "Anim.h"
 #include "Collision.h"
+#include <iostream>
 
 struct CTexture
 {

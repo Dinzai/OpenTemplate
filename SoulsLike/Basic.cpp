@@ -39,7 +39,6 @@ void CView::SetView(sf::RenderWindow &window, const sf::Sprite &spr, sf::Vector2
 
     cameraView.setCenter(spr.getPosition() + shakeOffset);
 
-    // window.setView(uiView);
     window.setView(cameraView);
 }
 
@@ -62,22 +61,22 @@ void CController::OnClick(std::unordered_set<sf::Mouse::Button> buttons)
         if (lastDirection.y == 1)
         {
             initialStateAttack = true;
-            //isStateAttackDown = true;
+       
         }
         if (lastDirection.y == -1)
         {
             initialStateAttack = true;
-            //isStateAttackUp = true;
+        
         }
         if (lastDirection.x == 1)
         {
             initialStateAttack = true;
-            //isStateAttackRight = true;
+         
         }
         if (lastDirection.x == -1)
         {
             initialStateAttack = true;
-            //isStateAttackLeft = true;
+         
         }
     }
 }
@@ -157,7 +156,6 @@ THEUI::THEUI(float maxHealth, float maxStamina)
     staminaShape.setSize(sf::Vector2f(sWidth, sHeight));
     staminaShape.setFillColor(sf::Color::Green);
 
-    //SetRecieverChannel(1);
 }
 
 void THEUI::SetPosition(sf::Vector2f position)
