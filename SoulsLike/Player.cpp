@@ -61,10 +61,10 @@ void Player::OnDamage(IStatus *damager, IStatus *damagee)
 
     if (canDamage && collision->CollisionDetection(temp->collision))
     {
-        
+
         if (damagee->senderChannel >= 2)
         {
-            
+
             damagee->values.x -= sentDamage;
             canDamage = false;
         }
@@ -257,7 +257,7 @@ void Player::Update(sf::Time deltaTime)
     }
     //-----------
 
-    if(canDamage)
+    if (canDamage)
     {
         values.y = 0.0f;
     }

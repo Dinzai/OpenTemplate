@@ -5,7 +5,7 @@
 
 struct LightingPillar : public Base
 {
-    LightingPillar(Assets& asset);
+    LightingPillar(Assets& asset, int channel);
     void SetPosition(int index, sf::Vector2f position);
     
     AllLights* lightComponent;

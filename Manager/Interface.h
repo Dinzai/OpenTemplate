@@ -22,6 +22,7 @@ enum Asset
     PLAYERATTACKR,
     LIGHTPILLARS,
     SQUIDENEMY,
+    TEST,
 };
 
 enum Layers

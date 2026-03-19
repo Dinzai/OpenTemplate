@@ -39,6 +39,10 @@ void Assets::Preload()
     Add(Asset::LIGHTPILLARS);
     Add(Asset::SQUIDENEMY);
 
+    Add(Asset::TEST, "test/bTest.png");
+
+
+
 }
 
 sf::Texture *Assets::PassTexture(Asset type)

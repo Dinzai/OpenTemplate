@@ -188,22 +188,37 @@ CollisionResult CCollideable::CollisionDetectionWithResolution(CCollideable *oth
 
 void CCollideable::ResolveCollision(CCollideable *other)
 {
+    if (isStatic && other->isStatic)
+        return;
+
+    sf::FloatRect a = ptrToSprites.at(0)->getGlobalBounds();
+    sf::FloatRect b = other->ptrToSprites.at(0)->getGlobalBounds();
+
+    if (!a.intersects(b))
+        return;
+
     auto result = CollisionDetectionWithResolution(other);
 
     if (!result.collided)
         return;
-    isColliding = result.collided;
-    other->isColliding = result.collided;
-    // std::cout << "collided" << isColliding << '\n';
 
-    // for (sf::Sprite *spr : ptrToSprites)
-    //{
-    // spr->move(result.mtv * 0.5f);
-    //}
-
-    for (sf::Sprite *spr : other->ptrToSprites)
+    if (isStatic)
     {
-        spr->move(-result.mtv * 0.5f);
+        for (auto spr : other->ptrToSprites)
+            spr->move(-result.mtv);
+    }
+    else if (other->isStatic)
+    {
+        for (auto spr : ptrToSprites)
+            spr->move(result.mtv);
+    }
+    else
+    {
+        for (auto spr : ptrToSprites)
+            spr->move(result.mtv * 0.5f);
+
+        for (auto spr : other->ptrToSprites)
+            spr->move(-result.mtv * 0.5f);
     }
 }
 

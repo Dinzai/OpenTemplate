@@ -19,13 +19,24 @@ void Loop::Play()
 // collision
 void Loop::AddToCollisionManager()
 {
-    managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetLight()->collision);
+    for (size_t i = 0; i < gameObjects.GetLights().size(); i++)
+    {
+        managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetLights().at(i)->collision);
+    }
 
     managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetPlayer()->collision);
 
     for (size_t i = 0; i < gameObjects.GetEnemies()->allSquidEnemies.size(); i++)
     {
         managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetEnemies()->allSquidEnemies.at(i)->collision);
+    }
+
+    for (size_t i = 0; i < gameObjects.GetData()->tiles.size(); i++)
+    {
+        if (gameObjects.GetData()->tiles.at(i)->isCollideable)
+        {
+            managerLib.GetCollisionManager().AddToCollisionManager(gameObjects.GetData()->tiles.at(i)->collision);
+        }
     }
 }
 // input
@@ -36,8 +47,12 @@ void Loop::AddToInputManager()
 // scene
 void Loop::AddToScene()
 {
-    managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetLight()->currentView);
-    managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetLight()->lightComponent);
+     managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetBackground());
+    for (size_t i = 0; i < gameObjects.GetLights().size(); i++)
+    {
+        managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetLights().at(i)->currentView);
+        managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetLights().at(i)->lightComponent);
+    }
 
     managerLib.GetScene().AddToCamera(gameObjects.GetPlayer());
     managerLib.GetScene().AddToScene(Layers::PLAYER, gameObjects.GetPlayer()->currentView);
@@ -52,13 +67,21 @@ void Loop::AddToScene()
     {
         managerLib.GetScene().AddToScene(Layers::UI, gameObjects.GetEnemies()->allSquidEnemyUI.at(i));
     }
-    
+
+    for (size_t i = 0; i < gameObjects.GetData()->tiles.size(); i++)
+    {
+        managerLib.GetScene().AddToScene(Layers::BACKGROUND, gameObjects.GetData()->tiles.at(i)->currentView);
+    }
 }
 // signal
 void Loop::AddToSignalManager()
 {
-    managerLib.GetSignalManager().AddToMailer(gameObjects.GetLight());
-    managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetLight()->lightComponent->lights.at(0));
+
+    for (size_t i = 0; i < gameObjects.GetLights().size(); i++)
+    {
+        managerLib.GetSignalManager().AddToMailer(gameObjects.GetLights().at(i));
+        managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetLights().at(i)->lightComponent->lights.at(0));
+    }
 
     managerLib.GetSignalManager().AddToMailer(gameObjects.GetPlayer());
     managerLib.GetSignalManager().AddToSubscibed(gameObjects.GetPlayerUI());
@@ -128,11 +151,21 @@ void Loop::Update()
 {
     deltaTime = mainClock.getElapsedTime();
     // SendToMailers needs to loop through all senders, and recivers, to check for damage messeges
-    for(size_t i = 2; i < managerLib.GetSignalManager().senders.size(); i++)
+    for (size_t i = 2; i < managerLib.GetSignalManager().senders.size(); i++)
     {
         managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(1), managerLib.GetSignalManager().senders.at(i));
     }
-    
+
+    for (size_t i = 0; i < gameObjects.GetEnemies()->allSquidEnemies.size(); i++)
+    {
+        Enemy *tempE = gameObjects.GetEnemies()->allSquidEnemies.at(i);
+        if (tempE->markedForDeath)
+        {
+            managerLib.GetScene().RemoveFromScene(Layers::ENTITY, i);
+            gameObjects.GetEnemies()->allSquidEnemies.erase(gameObjects.GetEnemies()->allSquidEnemies.begin() + i);
+        }
+    }
+
     managerLib.GetInputManager().GetDeltaTime(deltaTime);
     managerLib.GetInputManager().NotifyScene(managerLib.GetScene().renderMap);
 

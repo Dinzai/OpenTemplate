@@ -38,6 +38,8 @@ protected:
     sf::Time deltaTime;
     sf::Clock mainClock;
 
+    
+
     sf::Event event;
     sf::RenderWindow window;
     sf::ContextSettings settings;

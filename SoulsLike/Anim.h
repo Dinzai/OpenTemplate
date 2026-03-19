@@ -54,6 +54,11 @@ namespace DINZAI
             return &theSprite;
         }
 
+        sf::IntRect GetSpriteSheetSize()
+        {
+            return spriteSheetSize;
+        }
+
         void SetPosition(float x, float y)
         {
             theSprite.setPosition(sf::Vector2f(x, y));

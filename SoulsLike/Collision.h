@@ -95,6 +95,8 @@ public:
 
     bool isColliding;
 
+    bool isStatic = false;
+
 private:
     std::vector<sf::Vector2f> normals;
 

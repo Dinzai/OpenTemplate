@@ -3,7 +3,6 @@
 Enemy::Enemy(Assets &asset)
 {
     SetTexture(asset, SQUIDENEMY, 4, 1, 0.15f, 0, 2);
-    //SetSenderChannel(2);
 
     values = sf::Vector2f(health, stamina);
 }
@@ -24,6 +23,10 @@ sf::Vector2f Enemy::GetPosition()
 
 sf::Vector2f Enemy::GetValues()
 {
+    if(values.x <= 0)
+    {
+        markedForDeath = true;
+    }
     return values;
 }
 
@@ -31,6 +34,7 @@ AllEnemies::AllEnemies(Assets& asset)
 {
     AddToEnemies(asset, 10);
 }
+
 
 void AllEnemies::AddToEnemies(Assets& asset, int amount)
 {
@@ -42,6 +46,7 @@ void AllEnemies::AddToEnemies(Assets& asset, int amount)
     {
         Enemy *e = new Enemy(asset);
         e->SetPosition(posX, posY);
+        e->collision->isStatic = false;
 
         THEUI* uiTemp = new THEUI(e->health, e->stamina);
         e->SetSenderChannel(channel);
