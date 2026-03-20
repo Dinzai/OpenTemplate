@@ -25,21 +25,23 @@ sf::Vector2f Enemy::GetValues()
 {
     if(values.x <= 0)
     {
-        markedForDeath = true;
+        currentView->isMarkedForDeath = true;
+        collision->isMarkedForDeath = true;
+        
     }
     return values;
 }
 
 AllEnemies::AllEnemies(Assets& asset)
 {
-    AddToEnemies(asset, 10);
+    AddToEnemies(asset, 3);
 }
 
 
 void AllEnemies::AddToEnemies(Assets& asset, int amount)
 {
-    static int posX = 20;
-    static int posY = 20;
+    static int posX = 300;
+    static int posY = 200;
     static int channel = 2;
 
     for (int i = 0; i < amount; i++)

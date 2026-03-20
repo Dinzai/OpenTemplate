@@ -9,7 +9,7 @@ class Scene
 {
 public:
     
-
+    void VerifyDrawables();
     void AddToScene(Layers layer, IDrawable* viewComponent);
     void AddToCamera(IWatchable* watchable);
     void RemoveFromScene(Layers layer, int index);

@@ -18,7 +18,7 @@ struct CLight : public IApply
 
         // center vertex
         lightMesh[0].position = sf::Vector2f(0, 0);
-        lightMesh[0].color = sf::Color(colour.r, colour.g, colour.b, 255);
+        lightMesh[0].color = sf::Color(colour.r, colour.g, colour.b, 240);
 
         for (int i = 0; i <= segments; i++)
         {

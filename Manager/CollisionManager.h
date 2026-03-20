@@ -8,6 +8,10 @@ public:
 
     void AddToCollisionManager(IKnock* knocker);
 
+    void RemoveFromCollisionManager(IKnock* knocker);
+
+    void VerifyKnockables();
+
     void UpdateNormals();
 
     void CheckCollisions();

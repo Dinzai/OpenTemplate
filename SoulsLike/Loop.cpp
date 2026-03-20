@@ -47,7 +47,7 @@ void Loop::AddToInputManager()
 // scene
 void Loop::AddToScene()
 {
-     managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetBackground());
+     //managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetBackground());
     for (size_t i = 0; i < gameObjects.GetLights().size(); i++)
     {
         managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetLights().at(i)->currentView);
@@ -150,21 +150,15 @@ void Loop::FixedUpdate()
 void Loop::Update()
 {
     deltaTime = mainClock.getElapsedTime();
-    // SendToMailers needs to loop through all senders, and recivers, to check for damage messeges
+    
     for (size_t i = 2; i < managerLib.GetSignalManager().senders.size(); i++)
     {
         managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(1), managerLib.GetSignalManager().senders.at(i));
     }
 
-    for (size_t i = 0; i < gameObjects.GetEnemies()->allSquidEnemies.size(); i++)
-    {
-        Enemy *tempE = gameObjects.GetEnemies()->allSquidEnemies.at(i);
-        if (tempE->markedForDeath)
-        {
-            managerLib.GetScene().RemoveFromScene(Layers::ENTITY, i);
-            gameObjects.GetEnemies()->allSquidEnemies.erase(gameObjects.GetEnemies()->allSquidEnemies.begin() + i);
-        }
-    }
+    managerLib.GetScene().VerifyDrawables();
+
+    managerLib.GetCollisionManager().VerifyKnockables();
 
     managerLib.GetInputManager().GetDeltaTime(deltaTime);
     managerLib.GetInputManager().NotifyScene(managerLib.GetScene().renderMap);

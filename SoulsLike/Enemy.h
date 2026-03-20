@@ -15,8 +15,6 @@ struct Enemy : public Base
     float health = 100;
     float stamina = 75;
 
-    bool markedForDeath = false;
-
 };
 
 struct AllEnemies 

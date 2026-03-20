@@ -1,6 +1,20 @@
 #include "Scene.h"
 
 
+void Scene::VerifyDrawables()
+{
+    for(auto& [layer, objects] : renderMap)
+    {
+        for(size_t i = 0; i < objects.size(); i++)
+        {
+            if(objects.at(i)->isMarkedForDeath)
+            {
+                RemoveFromScene(layer, i);
+            }
+        }
+    }
+}
+
 void Scene::AddToScene(Layers layer, IDrawable* viewComponent)
 {
     renderMap[layer].push_back(viewComponent);

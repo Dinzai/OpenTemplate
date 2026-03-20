@@ -166,7 +166,15 @@ void THEUI::SetPosition(sf::Vector2f position)
 
 void THEUI::SetValues(sf::Vector2f values)
 {
-
+    if(currentHealth <= 0)
+    {
+        currentHealth = 0;
+        isMarkedForDeath = true;
+    }
+    if(currentStamina <= 0)    
+    {
+        currentStamina = 0;
+    }
     currentHealth = values.x / 10;
     currentStamina = values.y / 10;
 

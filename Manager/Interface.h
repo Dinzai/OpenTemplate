@@ -44,6 +44,9 @@ class IDrawable
 {
 public:
     virtual void Render(sf::RenderTarget &target) = 0;
+
+    bool isMarkedForDeath = false;
+
 };
 
 class IWatchable
@@ -57,6 +60,9 @@ class IKnock
 public:
     virtual void OnUpdateNormals() = 0;
     virtual void OnCollision(IKnock *other) = 0;
+
+    bool isMarkedForDeath = false;
+
 };
 
 class IStatus
