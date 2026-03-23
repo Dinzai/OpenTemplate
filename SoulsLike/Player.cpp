@@ -3,28 +3,22 @@
 Player::Player(Assets &asset)
 {
 
-    SetTexture(asset, PLAYERF, 4, 2, 0.15f, 0, 4); // 0
-    SetTexture(asset, PLAYERF, 4, 2, 0.15f, 4, 8);
+    SetTexture(asset, PLAYERF, 4, 2, 0.15f); // 0
 
-    SetTexture(asset, PLAYERB, 4, 2, 0.15f, 0, 4); // 2
-    SetTexture(asset, PLAYERB, 4, 2, 0.15f, 4, 8);
+    SetTexture(asset, PLAYERB, 4, 2, 0.15f); // 1
 
-    SetTexture(asset, PLAYERR, 4, 2, 0.25f, 0, 4); // 4
-    SetTexture(asset, PLAYERR, 4, 2, 0.25f, 4, 8);
+    SetTexture(asset, PLAYERR, 4, 2, 0.25f); // 2
 
-    SetTexture(asset, PLAYERL, 4, 2, 0.25f, 0, 4); // 6
-    SetTexture(asset, PLAYERL, 4, 2, 0.25f, 4, 8);
+    SetTexture(asset, PLAYERL, 4, 2, 0.25f); // 3
 
     // roll
-    SetTexture(asset, PLAYERROLLFB, 4, 1, 0.15f, 0, 4); // 8
+    SetTexture(asset, PLAYERROLLFB, 4, 1, 0.15f); // 4
+    SetTexture(asset, PLAYERROLLLR, 4, 2, 0.15f); // 5
 
-    SetTexture(asset, PLAYERROLLLR, 4, 2, 0.15f, 0, 4); // L
-    SetTexture(asset, PLAYERROLLLR, 4, 2, 0.15f, 4, 8); // R 10
-
-    SetTexture(asset, PLAYERATTACKF, 4, 1, 0.15f, 0, 4); // 11
-    SetTexture(asset, PLAYERATTACKB, 4, 1, 0.15f, 0, 4); // 12
-    SetTexture(asset, PLAYERATTACKR, 4, 1, 0.15f, 0, 4); // 13
-    SetTexture(asset, PLAYERATTACKL, 4, 1, 0.15f, 0, 4); // 14
+    SetTexture(asset, PLAYERATTACKF, 4, 1, 0.15f); // 6
+    SetTexture(asset, PLAYERATTACKB, 4, 1, 0.15f); // 7
+    SetTexture(asset, PLAYERATTACKR, 4, 1, 0.15f); // 8
+    SetTexture(asset, PLAYERATTACKL, 4, 1, 0.15f); // 9
 
     SetSenderChannel(1);
 
@@ -76,7 +70,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     if (coolDownTimer == 0.5 && direction.y == 1 && isStateRoll)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(8));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(4));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -85,7 +81,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     else if (direction.y == 1 || (isMovingDown && !isStateWalk))
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(1));
+        startFrame = 4;
+        limitFrame = 8;
+        renderMap[Layers::PLAYER].push_back(viewables.at(0));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -93,7 +91,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     }
     if (coolDownTimer == 0.5 && isStateAttackDown)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(11));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(6));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = true;
@@ -101,6 +101,8 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     }
     else if (!isStateAttackDown && isStateWalk && !isMovingDown && lastDirection.y == 1)
     {
+        startFrame = 0;
+        limitFrame = 4;
         renderMap[Layers::PLAYER].push_back(viewables.at(0));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
@@ -112,7 +114,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     if (coolDownTimer == 0.5 && direction.y == -1 && isStateRoll)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(8));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(4));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -121,7 +125,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     else if (direction.y == -1 || (isMovingUp && !isStateWalk))
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(3));
+        startFrame = 4;
+        limitFrame = 8;
+        renderMap[Layers::PLAYER].push_back(viewables.at(1));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -129,7 +135,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     }
     if (coolDownTimer == 0.5 && isStateAttackUp)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(12));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(7));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = true;
@@ -137,7 +145,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     }
     else if (isStateWalk && !isMovingUp && lastDirection.y == -1)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(2));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(1));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -146,7 +156,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     //-------------------------------------------------
     if (coolDownTimer == 0.5 && direction.x == 1 && isStateRoll)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(10));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(5));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -155,7 +167,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     else if (direction.x == 1 || (isMovingRight && !isStateWalk))
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(5));
+        startFrame = 4;
+        limitFrame = 8;
+        renderMap[Layers::PLAYER].push_back(viewables.at(2));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -164,7 +178,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     if (coolDownTimer == 0.5 && isStateAttackRight)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(13));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(8));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = true;
@@ -173,7 +189,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     else if (isStateWalk && !isMovingRight && lastDirection.x == 1)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(4));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(2));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -183,7 +201,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     //-------------------------------------------------
     if (coolDownTimer == 0.5 && direction.x == -1 && isStateRoll)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(9));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(5));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -192,7 +212,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     else if (direction.x == -1 || (isMovingLeft && !isStateWalk))
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(7));
+        startFrame = 4;
+        limitFrame = 8;
+        renderMap[Layers::PLAYER].push_back(viewables.at(3));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -201,7 +223,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     if (coolDownTimer == 0.5 && isStateAttackLeft)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(14));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(9));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = true;
@@ -210,7 +234,9 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
 
     else if (isStateWalk && !isMovingLeft && lastDirection.x == -1)
     {
-        renderMap[Layers::PLAYER].push_back(viewables.at(6));
+        startFrame = 0;
+        limitFrame = 4;
+        renderMap[Layers::PLAYER].push_back(viewables.at(3));
         renderMap[Layers::PLAYER].erase(renderMap[Layers::PLAYER].begin() + 0);
         currentView = viewables.at(0);
         canDamage = false;
@@ -218,6 +244,7 @@ void Player::OnCheck(std::map<Layers, std::vector<IDrawable *>> &renderMap)
     }
 }
 
+//------------------------------------------------------------
 void Player::Update(sf::Time deltaTime)
 {
 
@@ -312,7 +339,7 @@ void Player::Update(sf::Time deltaTime)
 
     for (auto view : viewables)
     {
-        view->texture2D->anim->Animate();
+        view->texture2D->anim->Animate(startFrame, limitFrame);
         view->texture2D->anim->GetSprite()->move(movement);
     }
 }

@@ -47,7 +47,7 @@ void Loop::AddToInputManager()
 // scene
 void Loop::AddToScene()
 {
-     //managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetBackground());
+    managerLib.GetScene().AddToScene(Layers::LIGHTS, gameObjects.GetBackground());
     for (size_t i = 0; i < gameObjects.GetLights().size(); i++)
     {
         managerLib.GetScene().AddToScene(Layers::ENTITY, gameObjects.GetLights().at(i)->currentView);
@@ -150,7 +150,7 @@ void Loop::FixedUpdate()
 void Loop::Update()
 {
     deltaTime = mainClock.getElapsedTime();
-    
+
     for (size_t i = 2; i < managerLib.GetSignalManager().senders.size(); i++)
     {
         managerLib.GetInputManager().SendToMailers(managerLib.GetSignalManager().senders.at(1), managerLib.GetSignalManager().senders.at(i));

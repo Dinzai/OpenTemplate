@@ -33,4 +33,8 @@ struct Player : public Base, CController, IWatchable
     float health = 100;
     float stamina = 75;
 
+
+    int startFrame = 0;
+    int limitFrame = 4;
+
 };

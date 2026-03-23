@@ -209,6 +209,16 @@ void Base::SetTexture(Assets &asset, Asset type, int xFrame, int yFrame, float a
     collision->AddTo(viewable->texture2D->anim->GetSprite());
 }
 
+void Base::SetTexture(Assets &asset, Asset type, int xFrame, int yFrame, float animTime)
+{
+    CView *viewable = new CView(asset, type, xFrame, yFrame, animTime,0, 4);
+
+    viewables.push_back(viewable);
+    currentView = viewables.at(0);
+
+    collision->AddTo(viewable->texture2D->anim->GetSprite());
+}
+
 sf::Vector2f Base::Normalize(sf::Vector2f &value)
 {
     float distanceSQR = (value.x * value.x + value.y * value.y);

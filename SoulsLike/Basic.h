@@ -114,6 +114,9 @@ struct Base : public IKnock, IStatus
 
     void SetTexture(Assets &asset, Asset type, int xFrame, int yFrame, float animTime, int startFrame, int endFrame);
 
+    void SetTexture(Assets &asset, Asset type, int xFrame, int yFrame, float animTime);
+
+
     sf::Vector2f Normalize(sf::Vector2f& value);
 
     virtual void OnUpdateNormals() override;

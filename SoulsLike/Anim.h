@@ -38,12 +38,36 @@ namespace DINZAI
             SetAnimTime(animationTime);
             SetSprite();
         }
+        SpriteSheet(sf::Texture *temp, int numXFrames, int numYFrames, float animationTime)
+        {
+            spriteSheetTexture = temp;
+            spriteSheetTexture->setSmooth(false);
+
+            spriteSheetSize.width = spriteSheetTexture->getSize().x;
+            spriteSheetSize.height = spriteSheetTexture->getSize().y;
+
+            theSprite.setTexture(*spriteSheetTexture);
+            theSprite.setTextureRect(spriteSheetSize);
+            SetFrameCount(numXFrames, numYFrames);
+            SetAnimTime(animationTime);
+            SetSprite(0, 4);
+        }
         // animate the sprite
         void Animate()
         {
             if (animClock.getElapsedTime().asSeconds() > animTime)
             {
                 SetSprite();
+                frameCount++;
+                animClock.restart();
+            }
+        }
+
+        void Animate(int startFrame, int limitFrame)
+        {
+            if (animClock.getElapsedTime().asSeconds() > animTime)
+            {
+                SetSprite(startFrame, limitFrame);
                 frameCount++;
                 animClock.restart();
             }
@@ -78,6 +102,38 @@ namespace DINZAI
     private:
         // this sets the image's width, height, depending on the frame
         void SetSprite()
+        {
+            if (frameCount < limitFrame && frameCount >= startFrame)
+            {
+
+                frameCount = frameCount % totalFrames;
+
+                int x = (frameCount % columns) * frameWidth;
+                int y = (frameCount / columns) * frameHeight;
+
+                spriteSheetSize.left = x;
+                spriteSheetSize.top = y;
+                spriteSheetSize.width = frameWidth;
+                spriteSheetSize.height = frameHeight;
+
+                theSprite.setTextureRect(spriteSheetSize);
+            }
+            else
+            {
+                frameCount = startFrame;
+                int x = (frameCount % columns) * frameWidth;
+                int y = (frameCount / columns) * frameHeight;
+
+                spriteSheetSize.left = x;
+                spriteSheetSize.top = y;
+                spriteSheetSize.width = frameWidth;
+                spriteSheetSize.height = frameHeight;
+
+                theSprite.setTextureRect(spriteSheetSize);
+            }
+        }
+
+         void SetSprite(int startFrame, int limitFrame)
         {
             if (frameCount < limitFrame && frameCount >= startFrame)
             {
